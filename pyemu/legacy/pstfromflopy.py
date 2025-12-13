@@ -2262,8 +2262,10 @@ class PstFromFlopyModel(object):
             pyemu.os_utils.run("pestchek {0} >pestchek.stdout".format(self.pst_name))
         except Exception as e:
             self.logger.warn("error running pestchek:{0}".format(str(e)))
-        for line in open("pestchek.stdout"):
+        f = open("pestchek.stdout")
+        for line in f:
             self.logger.statement("pestcheck:{0}".format(line.strip()))
+        f.close()
         os.chdir("..")
         self.log("running pestchek on {0}".format(self.pst_name))
 

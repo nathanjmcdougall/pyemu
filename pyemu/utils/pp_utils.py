@@ -368,7 +368,9 @@ def pp_tpl_to_dataframe(tpl_filename):
         df = pyemu.pp_utils.pp_tpl_file_to_dataframe("my_pp.dat.tpl")
 
     """
-    inlines = open(tpl_filename, "r").readlines()
+    f = open(tpl_filename, "r")
+    inlines = f.readlines()
+    f.close()
     header = inlines.pop(0)
     marker = header.strip().split()[1]
     assert len(marker) == 1

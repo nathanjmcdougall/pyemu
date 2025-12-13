@@ -1321,18 +1321,21 @@ class Pst(object):
         while True:
             line = f.readline()
             if line == "":
+                f.close()
                 raise Exception(
                     "Pst.load() error: EOF when trying to find first line - #sad"
                 )
             if line.strip().split()[0].lower() == "pcf":
                 break
         if not line.startswith("pcf"):
+            f.close()
             raise Exception(
                 "Pst.load() error: first non-comment line must start with 'pcf', not '{0}'".format(
                     line
                 )
             )
 
+        f.close()
         self._load_version2(filename)
         self._try_load_longnames()
         if parse_metadata:

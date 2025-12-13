@@ -51,9 +51,9 @@ def setup_tmp(od, tmp_path, sub=None):
 
 def _get_port():
     import socket
-    sock = socket.socket()
-    sock.bind(('', 0))
-    return sock.getsockname()[1]
+    with socket.socket() as sock:
+        sock.bind(('', 0))
+        return sock.getsockname()[1]
 
 
 @pytest.fixture

@@ -848,6 +848,8 @@ def _read_infile_with_tplfile(tpl_file, input_file):
                 pdict[pname] = v
         itpl += 1
         iin += 1
+    f_tpl.close()
+    f_in.close()
     df = pd.DataFrame({"parnme": pnames, "parval1": pvals}, index=pnames)
     return df
 
@@ -1365,6 +1367,10 @@ class InstructionFile(object):
             self._instruction_lines.append(line)
             self._instruction_lcount.append(self._ins_linecount)
 
+        if self._ins_filehandle is not None:
+            self._ins_filehandle.close()
+            self._ins_filehandle = None
+
     def throw_ins_warning(self, message, lcount=None):
         """throw a verbose PyemuWarning
 
@@ -1435,6 +1441,9 @@ class InstructionFile(object):
             val_dict.update(self._execute_ins_line(ins_line, ins_lcount))
             # except Exception as e:
             #    raise Exception(str(e))
+        if self._out_filehandle is not None:
+            self._out_filehandle.close()
+            self._out_filehandle = None
         df = pd.DataFrame.from_dict(val_dict, orient="index", columns=["obsval"])
         # s = pd.Series(val_dict)
         # s.sort_index(inplace=True)

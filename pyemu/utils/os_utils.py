@@ -65,7 +65,9 @@ def _istextfile(filename, blocksize=512):
     int2byte = (lambda x: bytes((x,))) if PY3 else chr
 
     _text_characters = b"".join(int2byte(i) for i in range(32, 127)) + b"\n\r\t\f\b"
-    block = open(filename, "rb").read(blocksize)
+    f = open(filename, "rb")
+    block = f.read(blocksize)
+    f.close()
     if b"\x00" in block:
         # Files with null bytes are binary
         return False
@@ -420,7 +422,11 @@ def start_workers(
             master_p = sp.Popen(args, stdout=stdout)  # ,stdout=sp.PIPE,stderr=sp.PIPE)
             os.chdir(base_dir)
         except Exception as e:
+            if stdout is not None:
+                stdout.close()
             raise Exception("error starting master instance: {0}".format(str(e)))
+        if stdout is not None:
+            stdout.close()
         time.sleep(0.5)  # a few cycles to let the master get ready
 
 

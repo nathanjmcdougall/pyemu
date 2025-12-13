@@ -1400,6 +1400,8 @@ class PstFrom(object):
             f_ins.write("\n")
             iline += 1
             iidx += 1
+        f_out.close()
+        f_ins.close()
 
     def add_observations(
         self,

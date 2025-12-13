@@ -4537,7 +4537,9 @@ def get_gpr_model_dict(mdf):
     import pickle
     gpr_model_dict = {}
     for output_name,model_fname in zip(mdf.output_name,mdf.model_fname):
-        gaussian_process = pickle.load(open(model_fname,'rb'))
+        f = open(model_fname,'rb')
+        gaussian_process = pickle.load(f)
+        f.close()
         gpr_model_dict[output_name] = gaussian_process
     return gpr_model_dict
 
@@ -4760,7 +4762,9 @@ def dsivc_forward_run(md_ies=".",ies_exe_path="pestpp-ies",num_workers=1):
     pvals = pd.read_csv(os.path.join(md_ies,"dsi_pars.csv"),index_col=0)
     
     worker_root="."
-    dsi = pickle.load(open(os.path.join(md_ies,"dsi.pickle"),"rb"))
+    f = open(os.path.join(md_ies,"dsi.pickle"),"rb")
+    dsi = pickle.load(f)
+    f.close()
     num_workers = dsi.dsi_args.get("num_pyworkers",1)
     print(num_workers,"workers requested for dsi")
     pyemu.os_utils.start_workers(md_ies,ies_exe_path,"dsi.pst",
@@ -4809,7 +4813,9 @@ def dsi_pyworker(pst,host,port,dsi=None,pvals=None):
         pvals = pd.read_csv("dsi_pars.csv",index_col=0)
     if dsi is None:
         import pickle
-        dsi = pickle.load(open("dsi.pickle","rb"))
+        f = open("dsi.pickle","rb")
+        dsi = pickle.load(f)
+        f.close()
 
     ppw = PyPestWorker(pst,host,port,verbose=False)
 

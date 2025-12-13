@@ -2428,7 +2428,9 @@ def modflow_sfr_gag_to_instruction_file(
         ins_file = gage_output_file + ".ins"
 
     # navigate the file to be sure the header makes sense
-    indat = [line.strip() for line in open(gage_output_file, "r").readlines()]
+    f = open(gage_output_file, "r")
+    indat = [line.strip() for line in f.readlines()]
+    f.close()
     header = [i for i in indat if i.startswith('"')]
     # yank out the gage number to identify the observation names
     if parse_filename:
@@ -2646,7 +2648,9 @@ def apply_hfb_pars(par_file="hfb6_pars.csv"):
     """
     hfb_pars = pd.read_csv(par_file)
 
-    hfb_mults_contents = open(hfb_pars.mlt_file.values[0], "r").readlines()
+    f = open(hfb_pars.mlt_file.values[0], "r")
+    hfb_mults_contents = f.readlines()
+    f.close()
     skiprows = (
         sum([1 if i.strip().startswith("#") else 0 for i in hfb_mults_contents]) + 1
     )
@@ -2716,7 +2720,9 @@ def write_hfb_zone_multipliers_template(m):
         os.mkdir(os.path.join(m.model_ws, "hfb6_mlt"))
 
     # read in the model file
-    hfb_file_contents = open(hfb_file, "r").readlines()
+    f = open(hfb_file, "r")
+    hfb_file_contents = f.readlines()
+    f.close()
 
     # navigate the header
     skiprows = (
